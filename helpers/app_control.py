@@ -197,7 +197,7 @@ def delete_files_or_folders(path):
 
     actual_path = result[0]
 
-    confirm = input(f"Permanently delete {actual_path}? (y/N): ")
+    confirm = input(f"Move this {path} to the Trash? (y/N): ")
     if confirm.lower() != "y":
         print("Deletion canceled.")
         return
