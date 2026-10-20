@@ -152,6 +152,8 @@ def open_app(app_name):
     # Open the application using the appropriate method for the Mac (for now)
     import subprocess
     name_type = path_to_app(app_name)
+    if name_type is None:
+        return
     if isinstance(name_type, tuple) and name_type[1] == "file_or_folder":
         # It's a file or folder path, open it directly
         try:
@@ -166,6 +168,8 @@ def open_app(app_name):
 def delete_files_or_folders(path):
     import shutil
     result = path_to_app(path)
+    if result is None:
+        return
     if not isinstance(result, tuple):
         print("File or folder not found.")
         return
