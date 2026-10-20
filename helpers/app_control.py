@@ -168,6 +168,22 @@ def open_app(app_name):
             print(f"Failed to open {app_name}: {e}")
 def delete_files_or_folders(path):
     import shutil
+    # check if path is allowed to be deleted
+    disallowed_paths = [
+        os.path.expanduser("~/Desktop"),
+        os.path.expanduser("~/Documents"),
+        os.path.expanduser("~/Downloads"),
+        os.path.expanduser("~/Pictures"),
+        os.path.expanduser("~/Music"),
+        os.path.expanduser("~/Movies"),
+        os.path.expanduser("~/.Trash"),
+        "/System",
+        "/Library",
+        "/Applications",
+    ]
+    if path in disallowed_paths:
+        print("Cannot delete the specified path. Don't delete system or important directories.")
+        return
     result = path_to_app(path)
     if result is None:
         return
