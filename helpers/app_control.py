@@ -1,4 +1,5 @@
 import os
+from send2trash import send2trash as st
 
 def path_to_app(app_name):
     # basically makes the shortcut of the app name to the actual name of the app (later we can do files and folders too)
@@ -183,9 +184,9 @@ def delete_files_or_folders(path):
 
     try:
         if os.path.isfile(actual_path):
-            os.remove(actual_path)
+            st(actual_path)
         elif os.path.isdir(actual_path):
-            shutil.rmtree(actual_path)
+            st(actual_path)
         else:
             print("File or folder not found.")
             return
