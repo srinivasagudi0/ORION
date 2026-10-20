@@ -1,3 +1,5 @@
+import os
+
 def path_to_app(app_name):
     # basically makes the shortcut of the app name to the actual name of the app (later we can do files and folders too)
     #check if this is a an application name or a file/folder path
@@ -120,3 +122,22 @@ def open_app(app_name):
             subprocess.run(["open", "-a", name_type], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Failed to open {app_name}: {e}")
+
+def delete_files_or_folders(path):
+    import os
+    import shutil
+    if os.path.isfile(path):
+        print(f"Should I delete file: {path}")
+        confirm = input("Are you sure? (Y/n): ")
+        if confirm.lower() == 'y':
+            os.remove(path)
+        else:
+            print("File deletion canceled.")
+        print(f"Deleted file: {path}")
+    elif os.path.isdir(path):
+        print(f"Should I delete folder: {path}")
+        confirm = input("Are you sure? (Y/n): ")
+        if confirm.lower() == 'y':
+            print(f"Deleting folder: {path}")
+        else:
+            print("Folder deletion canceled.")
