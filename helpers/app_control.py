@@ -12,6 +12,47 @@ def path_to_app(app_name):
     if os.path.exists(home_path):
         return (home_path, "file_or_folder")
     # If it's not a file or folder, assume it's an application name
+        # Search Spotlight for matching file and folder names
+    import subprocess
+
+    try:
+        result = subprocess.run(
+            ["mdfind", "-0", "-name", app_name],
+            capture_output=True,
+            text=True,
+            check=True,
+            timeout=10
+        )
+    except (subprocess.SubprocessError, OSError) as e:
+        print(f"Search failed: {e}")
+        return None
+
+    # Keep existing items whose full name matches, ignoring capitals
+    matches = sorted({
+        path
+        for path in result.stdout.split("\0")
+        if path
+        and os.path.exists(path)
+        and os.path.basename(path).casefold() == app_name.casefold()
+    })
+
+    if len(matches) == 1:
+        print(f"Found: {matches[0]}")
+        return (matches[0], "file_or_folder")
+
+    if len(matches) > 1:
+        print("Several matches found:")
+        for number, path in enumerate(matches, start=1):
+            print(f"{number}. {path}")
+
+        choice = input("Choose a number, or Enter to cancel: ").strip()
+
+        if choice.isdigit() and 1 <= int(choice) <= len(matches):
+            return (matches[int(choice) - 1], "file_or_folder")
+
+        print("Canceled.")
+        return None
+
     app_paths = {
         # Browsers
         "chrome": "Google Chrome",
@@ -122,22 +163,29 @@ def open_app(app_name):
             subprocess.run(["open", "-a", name_type], check=True)
         except subprocess.CalledProcessError as e:
             print(f"Failed to open {app_name}: {e}")
-
 def delete_files_or_folders(path):
-    import os
     import shutil
-    if os.path.isfile(path):
-        print(f"Should I delete file: {path}")
-        confirm = input("Are you sure? (Y/n): ")
-        if confirm.lower() == 'y':
-            os.remove(path)
+    result = path_to_app(path)
+    if not isinstance(result, tuple):
+        print("File or folder not found.")
+        return
+
+    actual_path = result[0]
+
+    confirm = input(f"Permanently delete {actual_path}? (y/N): ")
+    if confirm.lower() != "y":
+        print("Deletion canceled.")
+        return
+
+    try:
+        if os.path.isfile(actual_path):
+            os.remove(actual_path)
+        elif os.path.isdir(actual_path):
+            shutil.rmtree(actual_path)
         else:
-            print("File deletion canceled.")
-        print(f"Deleted file: {path}")
-    elif os.path.isdir(path):
-        print(f"Should I delete folder: {path}")
-        confirm = input("Are you sure? (Y/n): ")
-        if confirm.lower() == 'y':
-            print(f"Deleting folder: {path}")
-        else:
-            print("Folder deletion canceled.")
+            print("File or folder not found.")
+            return
+
+        print(f"Deleted: {actual_path}")
+    except OSError as e:
+        print(f"Could not delete: {e}")
