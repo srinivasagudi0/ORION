@@ -15,5 +15,11 @@ while True:
             open_app(app_name)
         else:
             print("Please specify an application name to open.")
+    if user_input.lower().startswith('type '):
+        text_to_type = user_input[5:].strip()
+        if text_to_type:
+            pass
+        else:
+            print("Please specify the text to type.")
     else:
         print(f"You entered: {user_input}")
