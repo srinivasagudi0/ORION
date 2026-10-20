@@ -4,7 +4,7 @@ def path_to_app(app_name):
     import os
     root = os.path.expanduser("~")
     if os.path.isfile(root + "/" + app_name) or os.path.isdir(root + "/" + app_name):
-        return (app_name, "file_or_folder")  # It's a file or folder path, return as is
+        return (os.path.join(root, app_name), "file_or_folder")  # It's a file or folder path, return as is
     # If it's not a file or folder, assume it's an application name
     app_paths = {
         # Browsers
