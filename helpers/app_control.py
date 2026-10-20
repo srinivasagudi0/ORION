@@ -3,8 +3,12 @@ def path_to_app(app_name):
     #check if this is a an application name or a file/folder path
     import os
     root = os.path.expanduser("~")
-    if os.path.isfile(root + "/" + app_name) or os.path.isdir(root + "/" + app_name):
-        return (os.path.join(root, app_name), "file_or_folder")  # It's a file or folder path, return as is
+    current_path = os.path.join(os.getcwd(), app_name)
+    if os.path.exists(current_path):
+        return (current_path, "file_or_folder")
+    home_path = os.path.join(root, app_name)
+    if os.path.exists(home_path):
+        return (home_path, "file_or_folder")
     # If it's not a file or folder, assume it's an application name
     app_paths = {
         # Browsers
