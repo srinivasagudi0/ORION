@@ -1,5 +1,5 @@
-from app_control import open_app
-from typing_controls import press_hotkey, write_text
+from helpers.app_control import open_app
+from helpers.typing_controls import press_hotkey, write_text, press_key
 import os
 
 
@@ -45,6 +45,22 @@ def startProject():
     press_hotkey(["command", "t"])  # Open a new tab
     press_hotkey(["command", "l"])  # Focus the address bar
     write_text("https://github.com/new")
+    press_key("enter")  # Navigate to the new repository page
+    for i in range(5):
+        press_hotkey(["tab"])  # Navigate through the form fields
+    write_text(project_name)
+    press_hotkey(["tab"])
+    write_text(project_description)
+    press_hotkey(["tab"])
+    if visibility == "private":
+        press_key("down")  # Select private visibility
+        press_key('space')  # Confirm selection
+    for i in range(2):
+        press_hotkey(["alt", "tab"])  #go to add readme checkbox
+    press_key('space')  # Check the box to add a README file
+    for i in range(9):
+        press_hotkey(["tab"])  # Navigate to the "Create repository" button
+    press_key('enter')  # prss enter in the name box
 
 if __name__ == "__main__":
     startProject()
