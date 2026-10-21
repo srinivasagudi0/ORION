@@ -1,6 +1,7 @@
 from helpers.app_control import open_app, delete_files_or_folders
 from helpers.typing_controls import type_text
 from helpers.mouse_controls import move_mouse, click_mouse, double_click_mouse, scroll_mouse
+from helpers.typing_controls import press_key, write_text, press_hotkey
 
 print("Welcome to ORION!")
 print("This is pre v1.0")
@@ -48,6 +49,26 @@ while True:
         except ValueError:
             print("Use the format: scroll amount (e.g., scroll 10 or scroll -10)")
 
+    elif user_input.lower().startswith("press "):  # press key NOT CLICK
+        key_to_press = user_input[6:].strip()
+        if key_to_press:
+            print(press_key(key_to_press))
+        else:
+            print("Please specify a key to press.")
+
+    elif user_input.lower().startswith("write "):
+        text_to_write = user_input[6:].strip()
+        if text_to_write:
+            print(write_text(text_to_write))
+        else:
+            print("Please specify the text to write.")
+
+    elif user_input.lower().startswith("hotkey "):
+        keys = user_input[7:].strip().split()
+        if keys:
+            print(press_hotkey(keys))
+        else:
+            print("Please specify the keys for the hotkey.")
             
     elif user_input.lower().startswith('delete '):
         path_to_delete = user_input[7:].strip()
