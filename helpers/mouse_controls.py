@@ -18,5 +18,8 @@ def double_click_mouse():
     return "Double-clicked."
 
 def scroll_mouse(amount):
-    pyautogui.scroll(amount)
+    current = 0
+    while current < amount:
+        pyautogui.scroll(1)
+        current += 1
     return f"Scrolled {amount}."
