@@ -14,7 +14,7 @@ def click_mouse():
     return "Clicked."
 
 def double_click_mouse():
-    pyautogui.doubleClick(interval=0.15)
+    pyautogui.doubleClick(interval=0.10)
     return "Double-clicked."
 
 def scroll_mouse(amount):

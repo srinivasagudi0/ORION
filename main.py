@@ -1,6 +1,6 @@
 from helpers.app_control import open_app, delete_files_or_folders
 from helpers.typing_controls import type_text
-from helpers.mouse_controls import move_mouse
+from helpers.mouse_controls import move_mouse, click_mouse, double_click_mouse, scroll_mouse
 
 print("Welcome to ORION!")
 print("This is pre v1.0")
@@ -33,6 +33,21 @@ while True:
             print(move_mouse(x, y))
         except ValueError:
             print("Please provide valid coordinates in the format: move x y")
+
+    elif user_input.lower().startswith('click'):
+        print(click_mouse())
+
+    elif user_input.lower().startswith('double click'):
+        print(double_click_mouse())
+
+    elif user_input.lower().startswith('scroll '):
+        try:
+            scroll, amount = user_input.split()
+            amount = int(amount)
+            print(scroll_mouse(amount))
+        except ValueError:
+            print("Use the format: scroll amount (e.g., scroll 10 or scroll -10)")
+
             
     elif user_input.lower().startswith('delete '):
         path_to_delete = user_input[7:].strip()
