@@ -47,6 +47,7 @@ def startProject():
     press_hotkey(["command", "l"])  # Focus the address bar
     write_text("https://github.com/new")
     press_key("enter")  # Navigate to the new repository page
+    time.sleep(2)
     for i in range(5):
         press_hotkey(["tab"])  # Navigate through the form fields
     write_text(project_name)
@@ -54,8 +55,9 @@ def startProject():
     write_text(project_description)
     press_hotkey(["tab"])
     if visibility == "private":
-        press_key('space')  # Confirm selection
-        press_key("down")  # Select private visibility
+        press_hotkey(['space'])  # Confirm selection
+        press_hotkey(["down"])  # Select private visibility
+        press_hotkey(['enter'])  # Confirm selection
         
     for i in range(2):
         press_hotkey(["alt", "tab"])  #go to add readme checkbox
