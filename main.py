@@ -2,6 +2,7 @@ from helpers.app_control import open_app, delete_files_or_folders
 from helpers.typing_controls import type_text
 from helpers.mouse_controls import move_mouse, click_mouse, double_click_mouse, scroll_mouse
 from helpers.typing_controls import press_key, write_text, press_hotkey
+from helpers.screen_controls import capture_screen
 
 print("Welcome to ORION!")
 print("This is pre v1.0")
@@ -69,7 +70,19 @@ while True:
             print(press_hotkey(keys))
         else:
             print("Please specify the keys for the hotkey.")
-            
+
+    elif user_input.lower().startswith("capture"):
+        screen_info = capture_screen()
+        print(f"Screen captured. Width: {screen_info['screen_width']}, Height: {screen_info['screen_height']}.")
+        print("Taking pic in 2 seconds...")
+        import time
+        time.sleep(1)
+        print("Taking pic in 1 second...")
+        time.sleep(1)
+        # Optionally, you can save the screenshot to a file
+        screen_info['image'].save("screenshot.png")
+        print("Screenshot saved as 'screenshot.png'.")
+
     elif user_input.lower().startswith('delete '):
         path_to_delete = user_input[7:].strip()
         if path_to_delete:
