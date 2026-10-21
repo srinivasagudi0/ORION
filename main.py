@@ -1,5 +1,6 @@
 from helpers.app_control import open_app, delete_files_or_folders
 from helpers.typing_controls import type_text
+from helpers.mouse_controls import move_mouse
 
 print("Welcome to ORION!")
 print("This is pre v1.0")
@@ -25,6 +26,14 @@ while True:
         else:
             print("Please specify the text to type.")
 
+    elif user_input.lower().startswith('move '):
+        try:
+            move, x, y = user_input.split()
+            x, y = int(x), int(y)
+            print(move_mouse(x, y))
+        except ValueError:
+            print("Please provide valid coordinates in the format: move x y")
+            
     elif user_input.lower().startswith('delete '):
         path_to_delete = user_input[7:].strip()
         if path_to_delete:
