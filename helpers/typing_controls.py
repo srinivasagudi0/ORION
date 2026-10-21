@@ -25,7 +25,7 @@ def press_hotkey(keys):
     if not keys or any(kets not in pyautogui.KEYBOARD_KEYS for kets in keys):
         return "Unknown or missing keys."
 
-    time.sleep(3) # you got to wait a bit for the hotkey to work
+    time.sleep(0.1) # you got to wait a bit for the hotkey to work
     pyautogui.hotkey(*keys)
     return "Shortcut pressed successfully."
 

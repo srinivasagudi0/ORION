@@ -1,3 +1,4 @@
+import time
 from helpers.app_control import open_app
 from helpers.typing_controls import press_hotkey, write_text, press_key
 import os
@@ -53,14 +54,16 @@ def startProject():
     write_text(project_description)
     press_hotkey(["tab"])
     if visibility == "private":
-        press_key("down")  # Select private visibility
         press_key('space')  # Confirm selection
+        press_key("down")  # Select private visibility
+        
     for i in range(2):
         press_hotkey(["alt", "tab"])  #go to add readme checkbox
     press_key('space')  # Check the box to add a README file
     for i in range(9):
         press_hotkey(["tab"])  # Navigate to the "Create repository" button
     press_key('enter')  # prss enter in the name box
+    time.sleep(2)  # Wait for the repository to be created
 
 if __name__ == "__main__":
     startProject()
