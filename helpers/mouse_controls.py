@@ -2,6 +2,10 @@ import pyautogui
 
 pyautogui.FAILSAFE = True
 
+def current_mouse_position():
+    x, y = pyautogui.position()
+    return f"Current mouse position: ({x}, {y})"
+
 def move_mouse(x, y):
     if not pyautogui.onScreen(x, y):
         return "That position is outside the screen."
