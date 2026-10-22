@@ -78,13 +78,32 @@ def validate_plan(plan):
     if not isinstance(plan, dict) or not isinstance(plan.get("actions"), list) or not plan["actions"]:
         return False, "The AI returned an invalid plan."
     for item in plan["actions"]:
-        if not isinstance(item, dict) or item.get("action") not in actions:
-            return False, "The plan contains an unsupported action."
+        if not isinstance(item, dict):
+            return False, "Each action must be a dictionary."
+        action = item.get("action")
+        if not isinstance(action, str) or action not in actions:
+            return False, f"Invalid action: {action}"
         args = item.get("arguments", {})
         if not isinstance(args, dict) or set(args) != available_args[item["action"]]:
             return False, f"Arguments for {item['action']} are missing or invalid."
         if item["action"] == "press_hotkey" and (not isinstance(args["keys"], list) or not args["keys"]):
             return False, "A hotkey needs at least one key."
+
+    if action == "open_app":
+        if not isinstance(args["app_name"], str) or not args["app_name"].strip():
+            return False, "Application name must be nonempty text."
+        
+    elif action in ("type_text", "write_text"):
+        if not isinstance(args["text"], str) or not args["text"]:
+            return False, "Text must be a nonempty string."
+
+    elif action == "move_mouse":
+        if type(args["x"]) is not int or type(args["y"]) is not int:
+            return False, "Mouse coordinates must be integers."
+
+    elif action == "scroll_mouse":
+        if type(args["amount"]) is not int:
+            return False, "Scroll amount must be an integer."
     return True, ""
 
 def execute_action(item):

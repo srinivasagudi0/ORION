@@ -22,8 +22,5 @@ def double_click_mouse():
     return "Double-clicked."
 
 def scroll_mouse(amount):
-    current = 0
-    while current < amount:
-        pyautogui.scroll(1)
-        current += 1
+    pyautogui.scroll(amount) # will now do neg nums too.
     return f"Scrolled {amount}."
