@@ -50,6 +50,24 @@ def classify_request(user_input):
 
     return int(result)
 
+def answer_question(user_input):
+    prompt = f"""
+        You are ORION, a macOS assistant. Answer the user's question or provide an explanation or chat response.
+
+        User's input: {user_input}
+    """
+
+    response = client.chat.completions.create(
+        model="gpt-5.6-luna",
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant that answers questions and provides explanations."},
+            {"role": "user", "content": prompt}
+        ],
+        max_tokens=150,
+        temperature=0.7
+    )
+    answer = response.choices[0].message.content.strip()
+    print(f"ORION: {answer}")
 
 def handle_ai_request(user_input):
     # 1. Answer a question or chat
