@@ -1,6 +1,7 @@
 import time
 from helpers.app_control import open_app
 from helpers.typing_controls import press_hotkey, write_text, press_key
+from helpers.mouse_controls import click_mouse
 import os
 
 
@@ -70,10 +71,20 @@ def startProject():
     print("Press 'Continue' to open the repository in VS Code.")
     a = input("Press anything to continue...")
     print("Continuing...")
+    time.sleep(1)
+    open_app("Safari")
+    time.sleep(2)
+    click_mouse(100, 100)  # Click to ensure Safari is active
+    time.sleep(1)
     press_hotkey(["command", "l"])  # Focus the address bar
     press_hotkey(["command", "c"])  # Copy the URL
     open_app("Visual Studio Code")
-    time.sleep(4)  # Wait for VS Code to open
+    time.sleep(2)
+    click_mouse(100, 100)  # Click to ensure VS Code is active
+    press_hotkey(["command", "shift", "n"])  # Open a new window in VS Code
+    time.sleep(1)  # Wait for the new window to open
+    click_mouse(100, 100)  # Click to ensure the new window is active
+    time.sleep(1)  # Wait for the new window to be ready
     press_hotkey(["command", "shift", "p"])  # Open the command palette
     write_text("Git: Clone")
     press_key("enter")  # Select the "Git: Clone" command
