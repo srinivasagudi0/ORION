@@ -6,6 +6,8 @@ import os
 
 
 def startProject():
+    print("\n\nOrion will create a Github repository for you and open it in VS Code.")
+    print("Make sure you have Safari and VS Code installed and logged in to Github on Safari.")
     logged_in = input("Are you logged in to GitHub on Safari? (y/n): ").strip().lower()
     if logged_in != "y":
         print("Please log in to GitHub before starting a new project.")
@@ -39,7 +41,8 @@ def startProject():
     print(f"Parent Folder: {os.path.abspath(location)}")
 
     print("\nProject details validated successfully!")
-
+    print("AVOID TOUCHING THE KEYBOARD OR MOUSE DURING THE AUTOMATION PROCESS.")
+    print("AFTER the repo is created, COME BACK to this TErminal and press 'Continue' to open the repo in VS Code.")
     print("STAY BACK AND WATCH THE STAY BACK AND WATCH THE MAGIC HAPPEN...")
 
     ## Step 2: Open github and do the form filling
