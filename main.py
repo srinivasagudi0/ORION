@@ -3,6 +3,7 @@ from helpers.typing_controls import type_text
 from helpers.mouse_controls import move_mouse, click_mouse, double_click_mouse, scroll_mouse
 from helpers.typing_controls import press_key, write_text, press_hotkey
 from helpers.screen_controls import capture_screen
+from ai_control import handle_ai_request
 
 print("Welcome to ORION!")
 print("This is pre v1.0")
@@ -91,4 +92,4 @@ while True:
             print("Please specify the file or folder path to delete.")
     
     else:
-        print(f"You entered: {user_input}")
+        handle_ai_request(user_input)

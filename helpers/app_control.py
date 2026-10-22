@@ -159,13 +159,18 @@ def open_app(app_name):
         # It's a file or folder path, open it directly
         try:
             subprocess.run(["open", name_type[0]], check=True)
+            return True
         except subprocess.CalledProcessError as e:
             print(f"Failed to open {name_type[0]}: {e}")
+            return False
     else:
         try:
             subprocess.run(["open", "-a", name_type], check=True)
+            return True
         except subprocess.CalledProcessError as e:
             print(f"Failed to open {app_name}: {e}")
+            return False
+        
 def delete_files_or_folders(path):
     import shutil
     # check if path is allowed to be deleted including their contents, if not, retur
