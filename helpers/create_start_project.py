@@ -44,6 +44,8 @@ def startProject():
 
     ## Step 2: Open github and do the form filling
     open_app("Safari")
+    click_mouse()  # Click to ensure Safari is active
+    time.sleep(1)
     press_hotkey(["command", "t"])  # Open a new tab
     press_hotkey(["command", "l"])  # Focus the address bar
     write_text("https://github.com/new")
@@ -74,16 +76,16 @@ def startProject():
     time.sleep(1)
     open_app("Safari")
     time.sleep(2)
-    click_mouse(100, 100)  # Click to ensure Safari is active
+    click_mouse()  # Click to ensure Safari is active
     time.sleep(1)
     press_hotkey(["command", "l"])  # Focus the address bar
     press_hotkey(["command", "c"])  # Copy the URL
     open_app("Visual Studio Code")
     time.sleep(2)
-    click_mouse(100, 100)  # Click to ensure VS Code is active
+    click_mouse()  # Click to ensure VS Code is active
     press_hotkey(["command", "shift", "n"])  # Open a new window in VS Code
     time.sleep(1)  # Wait for the new window to open
-    click_mouse(100, 100)  # Click to ensure the new window is active
+    click_mouse()  # Click to ensure the new window is active
     time.sleep(1)  # Wait for the new window to be ready
     press_hotkey(["command", "shift", "p"])  # Open the command palette
     write_text("Git: Clone")
@@ -102,6 +104,8 @@ def startProject():
     print("Repository cloned successfully!")
     # open it now
     press_key("enter")  # Open the cloned repository in VS Code
+    time.sleep(2)  # Wait for the repository to open
+    press_key("enter")  # trust the authorship of the repository thing
     
 
 if __name__ == "__main__":
