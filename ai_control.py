@@ -68,6 +68,10 @@ def answer_question(user_input):
     )
     answer = response.choices[0].message.content.strip()
     print(f"ORION: {answer}")
+    return answer
+
+def ask_for_clarification(user_input):
+    return f"I dont understand your request. Type 'help' to see what I can do. You said: '{user_input}'"
 
 def handle_ai_request(user_input):
     # 1. Answer a question or chat
