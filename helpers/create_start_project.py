@@ -65,7 +65,24 @@ def startProject():
     for i in range(9):
         press_hotkey(["tab"])  # Navigate to the "Create repository" button
     press_key('enter')  # prss enter in the name box
-    time.sleep(2)  # Wait for the repository to be created
+    time.sleep(3)  # Wait for the repository to be created
+    print("Repository created successfully!")
+    print("Press 'Continue' to open the repository in VS Code.")
+    a = input("Press anything to continue...")
+    print("Continuing...")
+    press_hotkey(["command", "l"])  # Focus the address bar
+    press_hotkey(["command", "c"])  # Copy the URL
+    open_app("Visual Studio Code")
+    time.sleep(4)  # Wait for VS Code to open
+    press_hotkey(["command", "shift", "p"])  # Open the command palette
+    write_text("Git: Clone")
+    press_key("enter")  # Select the "Git: Clone" command
+    time.sleep(1)  # Wait for the input box to appear
+    press_hotkey(["command", "v"])  # Paste the repository URL
+    press_key("enter")  # Confirm the URL
+    time.sleep(1)  # Wait for it to clone
+    # after cloning, VS Code will ask for the location to open the project
+    
 
 if __name__ == "__main__":
     startProject()
