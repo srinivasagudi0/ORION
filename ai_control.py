@@ -73,6 +73,28 @@ def answer_question(user_input):
 def ask_for_clarification(user_input):
     return f"I dont understand your request. Type 'help' to see what I can do. You said: '{user_input}'"
 
+def perform_task(user_input):
+    prompt = f'''
+        Convert the user's request into ONE supported action.
+        Return only a JSON Object. No markdown, or explanation.
+
+        Available formats:
+        {"action": "open_app", "arguments": {"app_name": "Safari"}}
+        {"action": "write_text", "arguments": {"text": "Hello, world!"}}
+        {"action": "press_key", "arguments": {"key": "enter"}}
+        {"action": "press_hotkey", "arguments": {"keys": ["command", "c"]}}
+        {"action": "clarify", "arguments": {"message": "Which app?"}}
+        
+
+        Rules:
+            - Use only the actions and formats listed above.
+            - If the request is unclear, return the "clarify" action with a message asking
+            - If multiple actions are needed, ask the user for one action at a time.
+            - Never invent new actions or formats.
+    '''
+
+    
+
 def handle_ai_request(user_input):
     # 1. Answer a question or chat
     # 2. perform a task that it can do (like open an app, type text, etc. or series (like a workflow in future))
