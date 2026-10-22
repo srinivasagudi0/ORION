@@ -81,7 +81,16 @@ def startProject():
     press_hotkey(["command", "v"])  # Paste the repository URL
     press_key("enter")  # Confirm the URL
     time.sleep(1)  # Wait for it to clone
-    # after cloning, VS Code will ask for the location to open the project
+    # choose the location to clone the repository
+    press_hotkey(["command", "shift", "g"])  # Open the "Go to Folder" dialog
+    write_text(location)  # Type the location path
+    press_key("enter")  # Confirm the location
+    time.sleep(1)  # Wait for the folder to be selected
+    press_key("enter")  # Confirm the clone operation
+    time.sleep(3)  # Wait for the cloning process to complete
+    print("Repository cloned successfully!")
+    # open it now
+    press_key("enter")  # Open the cloned repository in VS Code
     
 
 if __name__ == "__main__":
