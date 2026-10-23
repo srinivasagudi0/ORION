@@ -1364,14 +1364,14 @@ def open_app(app_name):
     if "/" not in app_name:
         try:
             result = subprocess.run(
-                ["mdfind", "0", "-name", app_name],
+                ["mdfind", "-0", "-name", app_name],
                 capture_output=True,
                 text=True,
                 check=True,
                 timeout=10
             )
 
-            wanted = app_name.casefold()
+            wanted = app_name.strip().casefold().removesuffix(".app")
             app_matches = sorted(
                 path
                 for path in result.stdout.split("\0")
@@ -1397,8 +1397,8 @@ def open_app(app_name):
                         return None
                     selected = app_matches[index]
 
-            subprocess.run(["open", selected], check=True)
-            return True
+                subprocess.run(["open", selected], check=True)
+                return True
         except (subprocess.CalledProcessError, OSError) as e:
             print(f"Failed to open {selected}: {e}")
             return False
