@@ -54,7 +54,7 @@ def path_to_app(app_name):
         print("Canceled.")
         return None
 
-    mac_app_paths = {
+    app_paths = {
     # =========================================================================
     # 1. macOS BUILT-IN SYSTEM APPLICATIONS & CORE UTILITIES
     # =========================================================================
@@ -1361,6 +1361,45 @@ def path_to_app(app_name):
 def open_app(app_name):
     # Open the application using the appropriate method for the Mac (for now)
     import subprocess
+    if "/" not in app_name:
+        try:
+            result = subprocess.run(
+                ["mdfind", "0", "-name", app_name],
+                capture_output=True,
+                text=True,
+                check=True
+                timeout=10
+            )
+
+            wanted = app_name.casefold()
+            app_matches = sorted(
+                path
+                for path in result.stdout.split("\0")
+                if path # just in case there are empty strings
+                and os.path.isdir(path)
+                and path.casefold().endswith(".app")
+                and os.path.basename(path)[:-4]:casefold() == wanted
+            )
+
+            if app_matches:
+                selected = app_matches[0]
+
+                if len(app_matches) > 1:
+                    for  number, path in enumerate(app_matches,1):
+                        print(f"{number}. {path}")
+                    choice = input("Choose an app or enter to cancel: ")
+
+                    if not choice.isdigit():
+                        return None
+                    
+
+
+
+
+
+        except FileNotFoundError:
+            print(f"Application '{app_name}' not found.")
+            return False
     name_type = path_to_app(app_name)
 
     if name_type is None:
