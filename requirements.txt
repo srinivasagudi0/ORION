@@ -1,3 +1,5 @@
 send2trash
 pyautogui
 openai
+pydantic
+pyperclip
