@@ -1367,7 +1367,7 @@ def open_app(app_name):
                 ["mdfind", "0", "-name", app_name],
                 capture_output=True,
                 text=True,
-                check=True
+                check=True,
                 timeout=10
             )
 
@@ -1378,7 +1378,7 @@ def open_app(app_name):
                 if path # just in case there are empty strings
                 and os.path.isdir(path)
                 and path.casefold().endswith(".app")
-                and os.path.basename(path)[:-4]:casefold() == wanted
+                and os.path.basename(path)[:-4].casefold() == wanted
             )
 
             if app_matches:
@@ -1391,15 +1391,18 @@ def open_app(app_name):
 
                     if not choice.isdigit():
                         return None
-                    
 
+                    index = int(choice) - 1
+                    if not 0 <= index < len(app_matches):
+                        return None
+                    selected = app_matches[index]
 
-
-
-
-        except FileNotFoundError:
-            print(f"Application '{app_name}' not found.")
+            subprocess.run(["open", selected], check=True)
+            return True
+        except (subprocess.CalledProcessError, OSError) as e:
+            print(f"Failed to open {selected}: {e}")
             return False
+        
     name_type = path_to_app(app_name)
 
     if name_type is None:
