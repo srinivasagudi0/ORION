@@ -1,6 +1,7 @@
 from helpers.app_control import open_app, delete_files_or_folders
 from helpers.typing_controls import type_text
 from helpers.mouse_controls import move_mouse, click_mouse, double_click_mouse, scroll_mouse
+from helpers.create_start_project import startProject as setup_project
 from helpers.typing_controls import press_key, write_text, press_hotkey
 from helpers.screen_controls import capture_screen
 from ai_control import handle_ai_request
@@ -18,7 +19,9 @@ while True:
     elif user_input.lower().startswith('open '):
         app_name = user_input[5:].strip()
         if app_name:
-            open_app(app_name)
+            result = open_app(app_name)
+            if result is False:
+                handle_ai_request(user_input)
         else:
             print("Please specify an application name to open.")
 
@@ -90,6 +93,7 @@ while True:
             delete_files_or_folders(path_to_delete)
         else:
             print("Please specify the file or folder path to delete.")
-    
+    elif user_input.lower() == 'setup':
+        setup_project()
     else:
         handle_ai_request(user_input)

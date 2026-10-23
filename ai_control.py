@@ -191,7 +191,8 @@ def perform_task(user_input):
             print(f"ORION: {result}")
         if not success:
             return False
-        return True
+        
+    return True
 
 def handle_ai_request(user_input):
     route = classify_request(user_input)
