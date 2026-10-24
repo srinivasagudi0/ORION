@@ -19,7 +19,7 @@ class ScreenStep(BaseModel):
     action: Literal[
         "open_app", "move_mouse", "click", "double_click", "scroll", "write_text", "press_key", "hotkey", "wait", "ask", "handoff", "done"
     ]
-    messages: str
+    message: str
     text: str
     x: int
     y: int
