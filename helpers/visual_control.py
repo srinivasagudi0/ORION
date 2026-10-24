@@ -1,3 +1,4 @@
+import subprocess
 import time
 import pyperclip
 import pyautogui
@@ -94,3 +95,60 @@ def paste_text(text):
         time.sleep(0.5)
     finally:
         pyperclip.copy(previous)
+
+def execute_screen_step(step, frame):
+    # i kinda did this once in a hurry and using Ai vibcoding
+
+    action = step.action
+
+    if action == "open_app":
+        if not step.text or "/" in step.text:
+            raise ValueError("Use an aplication name, not a path.")
+        subprocess.run(
+            ["open", "-a", step.text],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=15, 
+        )
+
+    elif action in ["move_mouse", "click", "double_click", "scroll"]:
+        x, y = screen_point(step, frame)
+
+    if action == "scroll" and not -10 <= step.amount <= 10:
+        raise ValueError("Scroll amount must be between -10 and 10.")
+
+    move_mouse(x, y)
+
+    if action == "click":
+        click_mouse()
+
+    elif action == "double_click":
+        double_click_mouse()
+    elif action == "scroll":
+        scroll_mouse(step.amount)
+    elif action == "write_text":
+        write_text(step.text)
+
+    elif action in ('press_key', 'hotkey'):
+        keys = step.keys
+        if (
+            not 1 <= len(keys) <= 5
+            or any (keys not in pyautogui.KEYBOARD_KEYS for keys in keys)
+            or (action == "press_key" and len(keys) != 1)
+        ):
+            raise ValueError("Invalid keys for action.")
+
+        if action == "press_key":
+            press_key(keys[0])
+        else:
+            press_hotkey(keys)
+
+    elif action == "wait":
+        if not 0 <= step.seconds <= 5:
+            raise ValueError("Wait time must be between 0 and 5 seconds.")
+        time.sleep(step.seconds)
+
+    else:
+        raise ValueError(f"Unknown action: {action}")
+    return f"Executed action: {action}."
