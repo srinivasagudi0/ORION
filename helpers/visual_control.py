@@ -79,11 +79,11 @@ def screen_point(step, frame):
     height = frame["screen_height"]    
     if tuple(pyautogui.size()) != (width, height):  
         raise ValueError("Display dimensions changed. Start the task again.")    
-        x = min(width - 1, int(step.x * width / frame["image_width"]))    
-        y = min(height - 1, int(step.y * height / frame["image_height"]))    
-        if not pyautogui.onScreen(x, y):        
-            raise ValueError("Target is outside the controllable screen.")    
-        return x, y
+    x = min(width - 1, int(step.x * width / frame["image_width"]))    
+    y = min(height - 1, int(step.y * height / frame["image_height"]))    
+    if not pyautogui.onScreen(x, y):        
+        raise ValueError("Target is outside the controllable screen.")    
+    return x, y
 
 def paste_text(text):
     # pastes text into the current focused window using the clipboard and command+v
@@ -98,44 +98,42 @@ def paste_text(text):
         pyperclip.copy(previous)
 
 def execute_screen_step(step, frame):
-    # i kinda did this once in a hurry and using Ai vibcoding
-
     action = step.action
 
     if action == "open_app":
-        if not step.text or "/" in step.text:
-            raise ValueError("Use an aplication name, not a path.")
+        if not step.text.strip() or "/" in step.text:
+            raise ValueError("Use an application name, not a path.")
+
         subprocess.run(
             ["open", "-a", step.text],
             check=True,
             capture_output=True,
             text=True,
-            timeout=15, 
+            timeout=15,
         )
 
-    elif action in ["move_mouse", "click", "double_click", "scroll"]:
+    elif action in ("move_mouse", "click", "double_click", "scroll"):
         x, y = screen_point(step, frame)
 
-    if action == "scroll" and not -10 <= step.amount <= 10:
-        raise ValueError("Scroll amount must be between -10 and 10.")
+        if action == "scroll" and not -10 <= step.amount <= 10:
+            raise ValueError("Scroll amount must be between -10 and 10.")
 
-    move_mouse(x, y)
+        move_mouse(x, y)
 
-    if action == "click":
-        click_mouse()
-
-    elif action == "double_click":
-        double_click_mouse()
-    elif action == "scroll":
-        scroll_mouse(step.amount)
+        if action == "click":
+            click_mouse()
+        elif action == "double_click":
+            double_click_mouse()
+        elif action == "scroll":
+            scroll_mouse(step.amount)
     elif action == "write_text":
-        write_text(step.text)
+        paste_text(step.text)
 
-    elif action in ('press_key', 'hotkey'):
+    elif action in ("press_key", "hotkey"):
         keys = step.keys
         if (
             not 1 <= len(keys) <= 5
-            or any (keys not in pyautogui.KEYBOARD_KEYS for keys in keys)
+            or any(key not in pyautogui.KEYBOARD_KEYS for key in keys)
             or (action == "press_key" and len(keys) != 1)
         ):
             raise ValueError("Invalid keys for action.")
@@ -152,7 +150,7 @@ def execute_screen_step(step, frame):
 
     else:
         raise ValueError(f"Unknown action: {action}")
-    return f"Executed action: {action}."
+    return f"Action sent: {action}. Check the next screenshot."
 
 def run_visual_task(goal, max_steps=40):
     if not goal.strip():
