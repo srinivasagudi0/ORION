@@ -1,3 +1,4 @@
+from openai import OpenAI
 import subprocess
 import time
 import pyperclip
@@ -152,3 +153,71 @@ def execute_screen_step(step, frame):
     else:
         raise ValueError(f"Unknown action: {action}")
     return f"Executed action: {action}."
+
+def run_visual_task(goal, max_steps=40):
+    if not goal.strip():
+        print("ORION: Please give me a task.")
+        return False
+
+    if not os.getenv("OPENAI_API_KEY"):
+        print("ORION: OPENAI_API_KEY is missing.")
+        return False
+
+    print("ORION: Starting screen control.")
+    print("Move the pointer to the top-left corner to stop.")
+    print("Questions and results will appear in this terminal.")
+
+    history = []
+    last_signature = None
+    repeats = 0
+
+    try:
+        client = OpenAI(timeout=30.0, max_retries=0)
+
+        for number in range(1, max_steps + 1):
+            pyautogui.failSafeCheck()
+
+            frame = read_screen()
+            print(f"ORION: Reading screen ({number}/{max_steps})...")
+
+            step = choose_step(client, goal, history, frame)
+            pyautogui.failSafeCheck()
+
+            print(f"ORION: {step.message}")
+
+            if step.action == "done":
+                return True
+
+            if step.action in ("ask", "handoff"):
+                print(
+                    "ORION: Complete/clarify that, "
+                    "then run the full task again."
+                )
+                return False
+
+            signature = step.model_dump_json(exclude={"message"})
+            repeats = repeats + 1 if signature == last_signature else 1
+            last_signature = signature
+
+            if repeats >= 4 and step.action != "wait":
+                raise RuntimeError("Repeated the same action; stopping.")
+
+            result = execute_screen_step(step, frame)
+
+            history.append({
+                "step": step.model_dump(),
+                "execution": result,
+            })
+
+            time.sleep(0.7)
+
+        print("ORION: Step limit reached. Task is not confirmed complete.")
+        return False
+
+    except (KeyboardInterrupt, pyautogui.FailSafeException):
+        print("\nORION: Stopped.")
+        return False
+
+    except Exception as error:
+        print(f"ORION: Stopped because: {error}")
+        return False
