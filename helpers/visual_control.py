@@ -1,3 +1,4 @@
+import pyautogui
 import os
 import io
 import json
@@ -65,3 +66,17 @@ def choose_step(client, goal, history, frame):
         raise RuntimeError("The model did not return a complete action.")
 
     return response.output_parsed
+
+def screen_point(step, frame):
+    # macs screen can have more pixels so adding a way to fix it (found this on reddit)
+    if not (0 <= step.x < frame["image_width"] and 0 <= step.y < frame["image_height"]):        
+        raise ValueError("Target is outside the screenshot.")    
+    width = frame["screen_width"]    
+    height = frame["screen_height"]    
+    if tuple(pyautogui.size()) != (width, height):  
+        raise ValueError("Display dimensions changed. Start the task again.")    
+        x = min(width - 1, int(step.x * width / frame["image_width"]))    
+        y = min(height - 1, int(step.y * height / frame["image_height"]))    
+        if not pyautogui.onScreen(x, y):        
+            raise ValueError("Target is outside the controllable screen.")    
+        return x, y
