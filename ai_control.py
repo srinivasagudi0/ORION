@@ -1,3 +1,4 @@
+from helpers.visual_control import run_visual_task
 import json
 import os
 from openai import OpenAI
@@ -200,5 +201,5 @@ def handle_ai_request(user_input):
     if route == 1:
         return answer_question(user_input)
     if route == 2:
-        return perform_task(user_input)
+        return run_visual_task(user_input)
     return ask_for_clarification(user_input)

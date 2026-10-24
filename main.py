@@ -1,3 +1,4 @@
+from helpers.visual_control import run_visual_task
 from helpers.app_control import open_app, delete_files_or_folders
 from helpers.typing_controls import type_text
 from helpers.mouse_controls import move_mouse, click_mouse, double_click_mouse, scroll_mouse
@@ -95,5 +96,7 @@ while True:
             print("Please specify the file or folder path to delete.")
     elif user_input.lower() == 'setup':
         setup_project()
+    elif user_input.lower().startswith("do "):
+        run_visual_task(user_input[3:].strip())
     else:
         handle_ai_request(user_input)
