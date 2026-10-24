@@ -1,3 +1,5 @@
+import time
+import pyperclip
 import pyautogui
 import os
 import io
@@ -80,3 +82,15 @@ def screen_point(step, frame):
         if not pyautogui.onScreen(x, y):        
             raise ValueError("Target is outside the controllable screen.")    
         return x, y
+
+def paste_text(text):
+    # pastes text into the current focused window using the clipboard and command+v
+    if not text or len(text) > 12000:
+        raise ValueError("Text is empty or too long.")
+    previous = pyperclip.paste()
+    try:
+        pyperclip.copy(text)
+        press_hotkey(["command", "v"])
+        time.sleep(0.5)
+    finally:
+        pyperclip.copy(previous)
