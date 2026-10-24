@@ -6,7 +6,7 @@ import pyautogui
 import os
 import io
 import json
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, ValidationError
 import base64
 from typing import Literal
 from helpers.screen_controls import capture_screen
@@ -178,7 +178,11 @@ def run_visual_task(goal, max_steps=40):
             frame = read_screen()
             print(f"ORION: Reading screen ({number}/{max_steps})...")
 
-            step = choose_step(client, goal, history, frame)
+            try:
+                step = choose_step(client, goal, history, frame)
+            except ValidationError as error:
+                print(f"ORION: Model returned invalid action: {error}")
+                step = choose_step(client, goal, history, frame)
             pyautogui.failSafeCheck()
 
             print(f"ORION: {step.message}")
