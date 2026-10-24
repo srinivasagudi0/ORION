@@ -1,4 +1,8 @@
+import os
+import io
+import json
 from pydantic import BaseModel, ConfigDict
+import base64
 from typing import Literal
 from helpers.screen_controls import capture_screen
 from helpers.mouse_controls import move_mouse, click_mouse, double_click_mouse, scroll_mouse
@@ -17,3 +21,47 @@ class ScreenStep(BaseModel):
     keys: list[str]
     amount: int
     seconds: float
+
+def read_screen():
+    # simply take a screenshot and and then encode it using base64 and send the full link back
+    frame = capture_screen()
+    buffer = io.BytesIO()
+    frame["image"].save(buffer, format="PNG")
+
+    encoded = base64.b64encode(buffer.getvalue()).decode("utf-8")
+    frame["image_url"]= f"data:image/png;base64,{encoded}"
+    return frame
+
+
+def choose_step(client, goal, history, frame):
+    # simply again use the taken screenshot and send it to the model with the goal and history, and get back the next step
+    state = {
+        "goal": goal,
+        "history": history,
+        "image_width": frame["image_width"],
+        "image_height": frame["image_height"],
+    }
+    response = client.responses.parse(
+        model="gpt-5.6-luna",
+        instructions=VISION_PROMPT,
+        reasoning={"effort": "low"},
+        max_output_tokens=2048,
+        store=False,
+        input=[{
+            "role": "user",
+            "content": [
+                {"type": "input_text", "text": json.dumps(state)},
+                {
+                    "type": "input_image",
+                    "image_url": frame["image_url"],
+                    "detail": "original",
+                },
+            ],
+        }],
+        text_format=ScreenStep,
+    )
+
+    if response.status != "completed" or response.output_parsed is None:
+        raise RuntimeError("The model did not return a complete action.")
+
+    return response.output_parsed
