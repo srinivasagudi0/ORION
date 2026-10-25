@@ -6,6 +6,7 @@ import pyautogui
 import os
 import io
 import json
+from urllib.parse import urlparse
 from pydantic import BaseModel, ConfigDict, ValidationError
 import base64
 from typing import Literal
@@ -30,6 +31,10 @@ class ScreenStep(BaseModel):
 def read_screen():
     # simply take a screenshot and and then encode it using base64 and send the full link back
     frame = capture_screen()
+    image = frame["image"].copy()
+    image.thumbnail((1600, 1000))
+    frame["image"] = image
+    frame["image_width"], frame["image_height"] = image.size
     buffer = io.BytesIO()
     frame["image"].save(buffer, format="PNG")
 
@@ -126,6 +131,18 @@ def execute_screen_step(step, frame):
             double_click_mouse()
         elif action == "scroll":
             scroll_mouse(step.amount)
+    elif action == "navigate_url":
+        url = step.text.stip()
+        if (
+            url.scheme != "https"
+            or not url.hostname
+            or url.username
+            or url.password
+        ):
+            raise ValueError("Invalid URL. Use a valid HTTPS URL without credentials.")
+        press_hotkey(["command", "l"])
+        paste_text(step.text)
+        press_key("enter")
     elif action == "write_text":
         paste_text(step.text)
 
