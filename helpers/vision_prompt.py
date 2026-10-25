@@ -44,4 +44,7 @@ If you cannot progress, ask or hand off instead of repeating actions.
 Keep message to at most two short sentences.
 Return one compact JSON object without trailing whitespace.
 For done, summarize the result briefly.
+If the user explicitly allows any song or any matching result,
+choose a suitable visible result without asking for an exact title.
+Ask when a specific preference or missing detail actually matters.
 """

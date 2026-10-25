@@ -193,12 +193,12 @@ def run_visual_task(goal, max_steps=40):
             pyautogui.failSafeCheck()
 
             frame = read_screen()
-            print(f"ORION: Reading screen ({number}/{max_steps})...")
+            print(f"ORION: {step.message}")
 
             try:
                 step = choose_step(client, goal, history, frame)
             except ValidationError as error:
-                print(f"ORION: Model returned invalid action: {error}")
+                print("ORION: Retrying an incomplete response")
                 step = choose_step(client, goal, history, frame)
             pyautogui.failSafeCheck()
 
@@ -239,7 +239,7 @@ def run_visual_task(goal, max_steps=40):
                 "execution": result,
             })
 
-            time.sleep(0.7)
+            time.sleep(0.2)
 
         print("ORION: Step limit reached. Task is not confirmed complete.")
         return False
