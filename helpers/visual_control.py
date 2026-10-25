@@ -18,7 +18,7 @@ from helpers.vision_prompt import VISION_PROMPT
 class ScreenStep(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
     action: Literal[
-        "open_app", "move_mouse", "click", "double_click", "scroll", "write_text", "press_key", "hotkey", "wait", "ask", "handoff", "done"
+        "open_app", "move_mouse", "click", "double_click", "scroll", "write_text", "press_key", "hotkey", "wait", "ask", "handoff", "done", "navigate_url"
     ]
     message: str
     text: str
@@ -132,7 +132,8 @@ def execute_screen_step(step, frame):
         elif action == "scroll":
             scroll_mouse(step.amount)
     elif action == "navigate_url":
-        url = step.text.stip()
+        address = step.text.strip()
+        url = urlparse(address)
         if (
             url.scheme != "https"
             or not url.hostname
@@ -140,9 +141,13 @@ def execute_screen_step(step, frame):
             or url.password
         ):
             raise ValueError("Invalid URL. Use a valid HTTPS URL without credentials.")
-        press_hotkey(["command", "l"])
-        paste_text(step.text)
-        press_key("enter")
+        subprocess.run(
+            ["open", "-a", "Safari", address],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=15,
+        )
     elif action == "write_text":
         paste_text(step.text)
 
@@ -193,7 +198,6 @@ def run_visual_task(goal, max_steps=40):
             pyautogui.failSafeCheck()
 
             frame = read_screen()
-            print(f"ORION: {step.message}")
 
             try:
                 step = choose_step(client, goal, history, frame)
