@@ -207,11 +207,22 @@ def run_visual_task(goal, max_steps=40):
             if step.action == "done":
                 return True
 
-            if step.action in ("ask", "handoff"):
-                print(
-                    "ORION: Complete/clarify that, "
-                    "then run the full task again."
+            if step.action == "ask":
+                answer = input(
+                    "Return to this terminal. Please" \
+                    "Your answer or 'cancel':  "
                 )
+                if not answer or answer.lower() == "cancel":
+                    print("ORION: Task canceled by user.")
+                    return False
+
+                history.append({
+                    "question": step.message,
+                    "answer": answer,
+                })
+                continue
+            if step.action == "handoff":
+                print("ORION: Complete the manual step, then run again.")
                 return False
 
             signature = step.model_dump_json(exclude={"message"})
