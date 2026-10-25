@@ -13,6 +13,7 @@ hotkey: keys contains PyAutoGUI names, such as ["command", "l"].
 wait: seconds is 0..5; use this while a page or response is loading.
 ask: message asks the user for missing information; this stops the run.
 handoff: message explains a manual step the user must do; stops the run.
+navigate_url: text is a complete HTTPS URL.Use it only when a browser is already active.It focuses the address bar, pastes the URL, and presses Enter together.Prefer navigate_url over three separate keyboard actions.
 done: message reports the observed result, including any requested answer.
 
 For unused fields use text="", x=0, y=0, keys=[], amount=0, seconds=0.
