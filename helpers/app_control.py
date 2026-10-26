@@ -1400,7 +1400,7 @@ def open_app(app_name):
                 subprocess.run(["open", selected], check=True)
                 return True
         except (subprocess.CalledProcessError, OSError) as e:
-            print(f"Failed to open {selected}: {e}")
+            print(f"Application search/open failed for {app_name}: {e}")
             return False
         
     name_type = path_to_app(app_name)
@@ -1453,6 +1453,31 @@ def delete_files_or_folders(path):
         return False
 
     actual_path = result[0]
+    # check the destination, including links
+    target = os.path.realpath(actual_path)
+    home = os.path.realpath(os.path.expanduser("~"))
+
+    protected = {
+        os.path.relpath(item)
+        for item in disallowed_paths
+    }
+
+    system_roots = [
+        "/System", "/Library", "/Applications",
+        "/usr", "/bin", "/sbin", "/private",
+        os.path.join(home, "Library"),
+        os.path.join(home, ".Trash"),
+    ]
+
+    if target in protected or os.path.commonpath([target, home]) == target:
+        print("Cannot move this protected folder to Trash.")
+        return False
+
+    for root in system_roots:
+        root = os.path.realpath(root)
+        if os.path.commonpath([target, root]) == root:
+            print("Cannot move system or application data to Trash.")
+            return False
 
     confirm = input(f"Move this {path} to the Trash? (y/N): ")
     if confirm.lower() != "y":

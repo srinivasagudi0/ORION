@@ -19,9 +19,7 @@ done: message reports the observed result, including any requested answer.
 
 For unused fields use text="", x=0, y=0, keys=[], amount=0, seconds=0.
 message is a short progress description, question, or final result.
-
-Use macOS shortcuts when practical. Navigate to websites by opening
-Safari, focusing the address bar, typing the URL, and pressing Enter.
+Use macOS shortcuts when practical.
 Use visible targets for clicks. Never reuse old coordinates blindly.
 Do not open a new tab or repeat a submitted search unnecessarily.
 
