@@ -1479,7 +1479,7 @@ def delete_files_or_folders(path):
             print("Cannot move system or application data to Trash.")
             return False
 
-    confirm = input(f"Move this {path} to the Trash? (y/N): ")
+    confirm = input(f"Move '{actual_path}' to Trash? (y/N): ").strip()
     if confirm.lower() != "y":
         print("Deletion canceled.")
         return

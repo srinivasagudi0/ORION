@@ -197,7 +197,6 @@ def perform_task(user_input):
 
 def handle_ai_request(user_input):
     route = classify_request(user_input)
-    print("Classifier returned:", repr(route))
     if route == 1:
         return answer_question(user_input)
     if route == 2:

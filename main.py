@@ -9,6 +9,39 @@ from ai_control import handle_ai_request
 
 print("Welcome to ORION!")
 print("This is pre v1.0")
+print("Type 'help' to see available commands.")
+
+def show_help():
+    print("""
+ORION commands:
+
+  open Safari          Open an application, file, or folder
+  type Hello           Open TextEdit and type text
+  write Hello          Type into the currently focused field
+  press enter          Press one key
+  hotkey command s     Press a keyboard shortcut
+
+  move 500 300         Move the mouse to X, Y
+  click                Click at the current mouse position
+  double click         Double-click at the current position
+  scroll -3            Scroll down; positive numbers scroll up
+
+  capture              Save a screenshot
+  delete <path>        Move a file or folder to Trash after confirmation
+  setup                Start the GitHub project setup routine
+
+  do <task>            Ask AI to control the computer
+  help                 Show these commands
+  exit                 Close ORION
+
+You can also ask a question in plain English.
+
+AI computer control:
+  Requires an OpenAI API key and uses paid requests.
+  Screenshots are sent to OpenAI.
+  Keep the keyboard and mouse still while a task runs.
+  Move the mouse to the top-left corner to stop automation.
+""")
 
 while True:
     user_input = input("> ")
@@ -43,6 +76,9 @@ while True:
 
     elif user_input.lower().startswith('click'):
         print(click_mouse())
+
+    elif user_input.strip().lower() == "help":
+        show_help()
 
     elif user_input.lower().startswith('double click'):
         print(double_click_mouse())
