@@ -36,3 +36,5 @@ MOVE THE POINTER TO THE TOP-LEFT corner to stop automattion.
 `AI features and everything else is working fine. I have tested it on my Mac and it works as expected. You can use the AI features by providing your own OpenAI API key and accepting the change in privacy settings.`
 
 Here is the demo video of the ORION assistant in action: 
+
+[demo video](https://www.youtube.com/watch?v=QxejfsESwnk)
