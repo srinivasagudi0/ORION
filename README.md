@@ -38,3 +38,8 @@ MOVE THE POINTER TO THE TOP-LEFT corner to stop automattion.
 Here is the demo video of the ORION assistant in action: 
 
 [demo video](https://www.youtube.com/watch?v=QxejfsESwnk)
+
+
+# AI USage
+
+I used Codex for some code changes and fixes and later changed it to my style. Also all of the prompts are written by Ai for Ai.
