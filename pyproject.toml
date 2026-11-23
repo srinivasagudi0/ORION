@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "orion-macos"
+version = "0.1.0"
+description = "A macOS automation assistant with terminal commands and AI screen control."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Srinivasa"}
+]
+dependencies = [
+    "send2trash",
+    "pyautogui",
+    "openai>=1.68.0",
+    "pydantic>=2",
+    "pyperclip",
+    "Pillow"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Operating System :: MacOS :: MacOS X",
+    "Programming Language :: Python :: 3"
+]
+
+[project.urls]
+Repository = "https://github.com/srinivasagudi0/ORION"
+Issues = "https://github.com/srinivasagudi0/ORION/issues"
+
+[project.scripts]
+orion = "orion_launcher:main"
+
+[tool.setuptools]
+py-modules = ["main", "ai_control", "orion_launcher"]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["helpers", "helpers.*"]
+namespaces = false
